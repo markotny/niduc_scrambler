@@ -1,4 +1,4 @@
-function [data] = scrambler(data)
+function [data] = scramblerDVB(data)
 
 sync = [ 1 0 0 1 0 1 0 1 0 0 0 0 0 0 0 ];
 size = length(data);
