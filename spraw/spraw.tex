@@ -1,0 +1,106 @@
+\documentclass[polish, 11pt]{article}
+    
+\usepackage[a4paper, margin=25mm]{geometry}
+\usepackage{babel,polski}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs,multirow,multicol}
+
+\usepackage{graphicx}
+\graphicspath{{DVB/} {V34/}}
+
+\usepackage{xcolor}
+\usepackage[font=small,labelfont=bf]{caption}
+\captionsetup[figure]{name=Rys.}
+
+\newcommand{\results}[2]{
+    \includegraphics[width=\textwidth]{#1}
+    \captionof{figure}{#2\label{fig:#1}}
+}
+
+\begin{document}
+\begin{titlepage}
+    \centering
+    {\scshape\LARGE Niezawodność i diagnostyka układów cyfrowych 2\\ projekt \par}
+    \vspace{1cm}
+    {\scshape\Large,,Unikanie utraty synchronizacji przy pomocy randomizacji (Scrambling)''\par}
+    \vspace{2cm}
+    {\itshape\Large Janusz Długosz --- 235746\/\par}
+    {\itshape\Large Jakub Dorda --- 235013\/\par}
+    {\itshape\Large Marcin Kotas --- 235098\/\par}
+    \vfill
+    Prowadzący:\par
+    Doc.~dr inż.~Jacek \textsc{Jarnicki}
+
+    \vfill
+
+    {\large Wrocław, \today\par}
+
+\end{titlepage}
+
+\section{Wstęp}
+
+\section{Scramblery}
+    \subsection{Po co?}
+
+    \subsection{Typowe rozwiązania}
+
+\section{Opis symulatora}
+    \subsection{Założenia}
+
+    \subsection{Opis programów}
+
+\section{Eksperymenty symulacyjne}
+    \subsection{Plan eksperymentów}
+
+    \subsection{Wyniki eksperymentów}
+
+    \subsection{Wnioski}
+
+\section{Literatura}
+
+\newpage
+\section{Wykresy}
+    \subsection{DVB}
+    \begin{minipage}{.5\textwidth}
+        \results{DVB_00}{Dane wejściowe: ciąg zer}
+        \vspace{1.5cm}
+        \results{DVB_10}{Dane wejściowe: ciąg jedynek}
+        \vspace{1.5cm}
+        \results{DVB_R0}{Dane wejściowe: ciąg losowych bitów}
+    \end{minipage}%
+    \hspace{1cm}
+    \begin{minipage}{.5\textwidth}
+        \results{DVB_01}{Dane wejściowe: ciąg zer}
+        \vspace{1.5cm}
+        \results{DVB_11}{Dane wejściowe: ciąg jedynek}
+        \vspace{1.5cm}
+        \results{DVB_R1}{Dane wejściowe: ciąg losowych bitów}
+    \end{minipage}
+
+\subsection{V34}
+    \begin{minipage}{.5\textwidth}
+        \results{V34_00}{Dane wejściowe: ciąg zer}
+        \vspace{1.5cm}
+        \results{V34_10}{Dane wejściowe: ciąg jedynek}
+        \vspace{1.5cm}
+        \results{V34_R0}{Dane wejściowe: ciąg losowych bitów}
+    \end{minipage}%
+    \hspace{1cm}
+    \begin{minipage}{.5\textwidth}
+        \results{V34_01}{Dane wejściowe: ciąg zer}
+        \vspace{1.5cm}
+        \results{V34_11}{Dane wejściowe: ciąg jedynek}
+        \vspace{1.5cm}
+        \results{V34_R1}{Dane wejściowe: ciąg losowych bitów}
+    \end{minipage}
+
+\subsection{Bit Error Rate}
+        \results{BER_DVB}{BER dla DVB}
+        \vspace{1.5cm}
+        \results{V34_10}{Dane wejściowe: ciąg jedynek}
+        \vspace{1.5cm}
+        \results{V34_R0}{Dane wejściowe: ciąg losowych bitów}
+
+
+\end{document}
