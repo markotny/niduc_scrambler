@@ -7,15 +7,15 @@
 \usepackage{booktabs,multirow,multicol}
 
 \usepackage{graphicx}
-\graphicspath{{DVB/} {V34/}}
+\graphicspath{{DVB/} {V34/} {img/}}
 
 \usepackage{xcolor}
 \usepackage[font=small,labelfont=bf]{caption}
 \captionsetup[figure]{name=Rys.}
 
-\newcommand{\results}[2]{
-    \includegraphics[width=\textwidth]{#1}
-    \captionof{figure}{#2\label{fig:#1}}
+\newcommand{\results}[3][1.0]{
+    \includegraphics[width=#1\textwidth]{#2}
+    \captionof{figure}{#3\label{fig:#1}}
 }
 
 \begin{document}
@@ -40,10 +40,51 @@
 
 \section{Wstęp}
 
-\section{Scramblery}
-    \subsection{Po co?}
-
-    \subsection{Typowe rozwiązania}
+\section{Scramblery - teoria}
+    \subsection{Przeznaczenie}
+	    Scramblery są kluczowym elementem warstwy fizycznej systemu transmisji bezprzewodowej, poza zapewnieniem
+	    kodowania interwałowego oraz modulacji transmisji, powodami dla których używa się układów scaramblujących są:
+	    \begin{itemize}
+	    	\item Dokładne odtworzenie czasu w układzie odbiorczym potrzebnego do synchronizacji transmisji,
+	    	bez konieczności używania redundantnych znaków końca ramki. Rozwiązuje to problem potrzeby stosowania
+	    	układu odtwarzającego taktowanie. Automatyzuje kontrolę wzmocnienia sygnału oraz pracę innych układów
+	    	przetwarzających sygnał, dzięki eliminacji długich ciągów zer i jedynek.
+	    	\item Zmniejszenie zakłóceń sygnału między falami nośnymi, bardziej zróżnicowane dane zapewniają
+	    	rozproszenie widma sygnału co przekłada się na mniejszą wrażliwość na zakłócenia między sąsiednimi
+	    	kanałami transmisji.
+	    	\item Prosta metoda szyfrowania transmisji, stosowana dla sygnałów analogowych. Zarówno scrambler
+	    	w urządzeniu nadawczym jak i descrambler w urządzeniu odbiorczym muszą posiadać ten sam klucz/ciąg
+	    	znaków w celu poprawnego dekodowania danych.
+	    \end{itemize}
+	    
+    \subsection{Typy scramblerów}
+	    \subparagraph{Addytywny (synchroniczny)\\}
+		    Scramblery synchroniczne przetwarzają dane wejściowe przez zastosowanie podwójnej operacji xor z dwoma najmłodszymi
+		    bitami pseudo losowego ciągu znaków oraz bitem wejścia. Po każdej operacji ciąg - klucz jest przesuwany o jedną
+		    pozycję w prawo, a wynik xor dwóch najmłodszych bitów zapisywany na pozycji pierwszej. Ta implementacja scramblera
+		    posiada wadę konieczności synchronizacji między scramblerem, a descramblerem przez zastosowanie zakodowanego słowa
+		    inicjalizującego przeładowanie ciągu znaków losowych do stanu początkowego, dzieje się to na początku każdej nowej ramki
+		    danych. Scrambler addytywny jest zarówno descramblerem bez konieczności dodatkowych modyfikacji. 
+		    
+		    \vspace{0.5cm}
+		    \begin{center}
+		    	\results[0.7]{sc_add}{Scrambler addytywny\\źródło: wikipedia.org}
+		    \end{center}
+		    
+	    \subparagraph{Multiplikacyjny (samo-synchronizujący)\\}
+		    Scramblery multyplikacyjne, nazywane są tak ponieważ wykonują mnożenie sygnału wejściowego z funkcją przejścia ciągu
+		    znaków scramblera. W implementacji zgodnej ze standardem V.34 dokonuje operacji xor na 18 i 23 bicie klucza, jest
+		    to tzw. funkca przejścia scramblera. Wynikiem jest pierwszy bit ciągu klucza, po operacji xor z bitem wejściowym oraz
+		    wynikiem funkcji przejścia. Skrambler multiplikacyjny jest rekurencyjny, a descrambler nie, przez co ich konstrukcje
+		    różnią się. Skramblery multiplikacyjne, w przeciwieństwie do addytywnych, nie wymagają synchronizacji ciągu znaków
+		    z deskramblerami.
+		    
+		    \vspace{0.5cm}
+		    \begin{center}
+		    	\results[0.7]{sc_mul1}{Scrambler multiplikacyjny V.34\\źródło: wikipedia.org}
+		    	\vspace{0.5cm}
+		    	\results[0.7]{sc_mul2}{Descrambler multiplikacyjny V.34\\źródło: wikipedia.org}
+		    \end{center}
 
 \section{Opis symulatora}
     \subsection{Założenia}
