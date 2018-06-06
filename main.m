@@ -134,5 +134,9 @@ ber_total = ber_total.';
 subplot(2,1,1)
 x = 0:0.005:0.1;
 plot(x,ber_total(1,1:21),x,ber_total(2,1:21),x,ber_total(3,1:21));
+    xlabel('prawdopodobieñstwo przek³amania');
+    ylabel('Bit Error Rate');
 subplot(2,1,2)
 plot(x,ber_total(4,1:21),x,ber_total(5,1:21),x,ber_total(6,1:21));
+    xlabel('prawdopodobieñstwo przek³amania');
+    ylabel('Bit Error Rate');
