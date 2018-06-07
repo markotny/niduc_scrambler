@@ -42,6 +42,8 @@
 \newpage
 
 \section{Wstęp}
+	Projekt polegał na wymodelowaniu systemu transmisji danych cyfrowych używającego scramblerów oraz porównanie efektywności implementacji w wariancie
+	addytywnym i multiplikacyjnym. Eksperyment miał na celu zbadanie która implementacja cechuje się mniejszym wskaźnikiem BER - Bit Error Rate.
 
 \section{Scramblery - teoria}
     \subsection{Przeznaczenie}
@@ -63,12 +65,11 @@
     \subsection{Typy scramblerów}
 	    \subparagraph{Addytywny (synchroniczny)\\}
 		    Scramblery synchroniczne przetwarzają dane wejściowe przez zastosowanie podwójnej operacji xor z dwoma najmłodszymi
-		    bitami pseudo losowego ciągu znaków oraz bitem wejścia. Ciąg znaków używanych przez scrambler jest przechowywany w
-		    pamięci przeznaczonej jedynie do odczytu, czasami zamiast losowego używany jest też pre-kalkulowany, zoptymalizowany ciąg znaków.
-		    Po każdej operacji ciąg - klucz jest przesuwany o jedną pozycję w prawo, a wynik xor dwóch najmłodszych bitów zapisywany na
-		    pozycji pierwszej. Ta implementacja scramblera posiada wadę konieczności synchronizacji między scramblerem, a descramblerem
-		    przez zastosowanie zakodowanego słowa inicjalizującego przeładowanie ciągu znaków losowych do stanu początkowego, dzieje się
-		    to na początku każdej nowej ramki danych. Scrambler addytywny jest zarówno descramblerem bez konieczności dodatkowych modyfikacji. 
+		    bitami pseudo losowego ciągu znaków oraz bitem wejścia. Po każdej operacji ciąg - klucz jest przesuwany o jedną
+		    pozycję w prawo, a wynik xor dwóch najmłodszych bitów zapisywany na pozycji pierwszej. Ta implementacja scramblera
+		    posiada wadę konieczności synchronizacji między scramblerem, a descramblerem przez zastosowanie zakodowanego słowa
+		    inicjalizującego przeładowanie ciągu znaków losowych do stanu początkowego, dzieje się to na początku każdej nowej ramki
+		    danych. Scrambler addytywny jest zarówno descramblerem bez konieczności dodatkowych modyfikacji. 
 		    
 		    \vspace{0.5cm}
 		    \begin{center}
