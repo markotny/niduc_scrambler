@@ -15,7 +15,7 @@
 
 \newcommand{\results}[3][1.0]{
     \includegraphics[width=#1\textwidth]{#2}
-    \captionof{figure}{#3\label{fig:#1}}
+    \captionof{figure}{#3\label{fig:#2}}
 }
 
 \begin{document}
@@ -37,6 +37,9 @@
     {\large Wrocław, \today\par}
 
 \end{titlepage}
+
+\tableofcontents
+\newpage
 
 \section{Wstęp}
 
@@ -107,36 +110,78 @@
     	Do funkcji przekazywana jest tablica bitów oraz prawdopodobieństwo z jakim pojedynczy bit może zostać przekłamany. Dla każdego bitu z danych wejściowych losowana jest liczba rzeczywista z przedziału [0,1], jeśli będzie ona mniejsza od zadanego prawdopodobieństwa to na bicie z danych wejściowych zostanie przeprowadzona negacja, jeśli będzie większa to bit zostanie zostawiony bez zmian.
 \section{Eksperymenty symulacyjne}
     \subsection{Plan eksperymentów}
+        Eksperymenty przeprowadzone są dla każdego zestawu danych --- ciągi zer, jedynek oraz losowych bitów.
+        Rozmiar danych dla którego przedstawiono wykresy wynosił 1000000 elementów.
 
+        W pierwszej kolejności ciągi danych są przekazywane do obu scramblerów.
+        Funkcja monitor generuje wykres przedstawiający liczbę wystąpień oraz długości ciągów zer i jedynek w danych.
+
+        W celu wyznaczenia wskaźnika Bit Error Rate dane zescramblowane przepuszczane są przez kanał.
+        Kanał z zadanym prawdopodobieństwem zamienia kolejne bity danych na przeciwne.
+        W ramach eksperymentu prawdopodobieństwo przekłamania zmieniane jest od 0\% do 10\% co 0,5\%.
+
+        Po wyjściu z kanału dane są descramblowane, a następnie porównywane z oryginalnym zestawem danych.
+        Liczba błędnych bitów dzielona jest przez rozmiar danych, aby uzyskać wskaźnik BER.\
+        
     \subsection{Wyniki eksperymentów}
+        Wykresy~\ref{fig:DVB_00},~\ref{fig:DVB_01} oraz~\ref{fig:V34_00},~\ref{fig:V34_01} przedstawiają ciąg zer po scramblingu odpowiednio DVB oraz V34.
+        W przypadku scramblera V34 żadne bity nie zostały zamienione, ponieważ na początku w buforze scramblera znajdują się same zera.
+        Operacja \(0 \oplus 0\) zawsze da w wyniku 0, więc stan bufora nigdy się nie zmieni.
+        Scrambler DVB zawsze zaczyna od słowa SYNC w buforze, co eliminuje ten problem.
+
+        W przypadku ciągu jedynek (wykresy~\ref{fig:DVB_10},~\ref{fig:DVB_11} oraz~\ref{fig:V34_10},~\ref{fig:V34_11}) oba scramblery zachowują się już poprawnie.
+        Liczba wystąpień poszczególnych długości ciągów jest podobna dla obu rodzajów scramblera. 
+        Scrambler V34 wygenerował jednak najdłuższy ciąg długości 18, natomiast DVB długości 14.
+
+        Dla danych generowanych losowo (wykresy~\ref{fig:DVB_R0},~\ref{fig:DVB_R1} oraz~\ref{fig:V34_R0},~\ref{fig:V34_R1})
+        oba scramblery dały podobne wyniki.
+
+        Bit Error Rate scramblera V34 (wykres~\ref{fig:BER_V34}) w zmierzonym zakresie jest znacznie gorszy od scramblera DVB (wykres~\ref{fig:BER_DVB}).
+        Rośnie on około 2 razy szybciej.
 
     \subsection{Wnioski}
+        Scramblery działają poprawnie, dane wyjściowe składają się głównie z krótkich ciągów tych samych bitów.
+        Bieżąca implementacja kanału nie jest wystarczająco dopracowana na potrzeby symulacji.
+        Przekłamania bitów powinny odbywać się z prawdopodobieństwem, które rośnie wraz z długością ciągu tych samych bitów w danych.
+        Dopiero wtedy widoczne stałyby się zyski wynikające z użycia scramblerów.
+        
+        Obecnie z eksperymentu wynika, iż użycie scramblera skutkuje w najlepszym wypadku niepogorszeniem współczynnika BER (dla DVB BER = prawdopodobieństwu przekłamania),
+        a w najgorszym przypadku dwukrotnym wzroście współczynnika BER (dla V34).
+        Wzrost BER dla V34 wynika z faktu, że bity danych ładowane są do bufora, a więc przekłamany bit może skutkować późniejszym dodatkowym przekłamaniem.
 
-\section{Literatura}
+        Eksperyment można więc uznać za nieudany, ponieważ użyty symulator nie uwzględnia istotnych zjawisk zachodzących podczas transmisji.
 
 \newpage
 \section{Wykresy}
     \subsection{DVB}
+
     \begin{minipage}[t]{.5\textwidth}
         \results{DVB_00}{Dane wejściowe: ciąg zer}
-        \vspace{1.5cm}
-        \results{DVB_10}{Dane wejściowe: ciąg jedynek}
-        \vspace{1.5cm}
-        \results{DVB_R0}{Dane wejściowe: ciąg losowych bitów}
     \end{minipage}%
     \hspace{1cm}
     \begin{minipage}[t]{.5\textwidth}
         \results{DVB_01}{Dane wejściowe: ciąg zer}
-        \vspace{1.5cm}
+    \end{minipage}%
+    \vspace{1.5cm}
+    \begin{minipage}[t]{.5\textwidth}
+        \results{DVB_10}{Dane wejściowe: ciąg jedynek}
+    \end{minipage}%
+    \hspace{1cm}
+    \begin{minipage}[t]{.5\textwidth}
         \results{DVB_11}{Dane wejściowe: ciąg jedynek}
-        \vspace{1.5cm}
+    \end{minipage}%
+    \vspace{1.5cm}
+    \begin{minipage}[t]{.5\textwidth}
+        \results{DVB_R0}{Dane wejściowe: ciąg losowych bitów}
+    \end{minipage}%
+    \hspace{1cm}
+    \begin{minipage}[t]{.5\textwidth}
         \results{DVB_R1}{Dane wejściowe: ciąg losowych bitów}
     \end{minipage}
 
 \subsection{V34}
     \begin{minipage}[t]{.5\textwidth}
         \results{V34_00}{Dane wejściowe: ciąg zer}
-        \vspace{1.5cm}
     \end{minipage}%
     \hspace{1cm}
     \begin{minipage}[t]{.5\textwidth}
