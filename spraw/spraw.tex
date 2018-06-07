@@ -75,9 +75,9 @@
 		    Scramblery multyplikacyjne, nazywane są tak ponieważ wykonują mnożenie sygnału wejściowego z funkcją przejścia ciągu
 		    znaków scramblera. W implementacji zgodnej ze standardem V.34 dokonuje operacji xor na 18 i 23 bicie klucza, jest
 		    to tzw. funkca przejścia scramblera. Wynikiem jest pierwszy bit ciągu klucza, po operacji xor z bitem wejściowym oraz
-		    wynikiem funkcji przejścia. Skrambler multiplikacyjny jest rekurencyjny, a descrambler nie, przez co ich konstrukcje
-		    różnią się. Skramblery multiplikacyjne, w przeciwieństwie do addytywnych, nie wymagają synchronizacji ciągu znaków
-		    z deskramblerami.
+		    wynikiem funkcji przejścia. Scrambler multiplikacyjny jest rekurencyjny, a descrambler nie, przez co ich konstrukcje
+		    różnią się. Scramblery multiplikacyjne, w przeciwieństwie do addytywnych, nie wymagają synchronizacji ciągu znaków
+		    z descramblerami.
 		    
 		    \vspace{0.5cm}
 		    \begin{center}
@@ -88,9 +88,23 @@
 
 \section{Opis symulatora}
     \subsection{Założenia}
-
+     Napisany program miał za zadanie wytworzyć ciąg zer, ciąg jedynek oraz losowy ciąg bitów (wszystkie o długości 1000000). Następnie symulowane było scramblowanie dla każdego z przypadków za pomocą scramblera addytywnego DVB oraz multiplikacyjnego V34. Tak przetworzone dane przesyłane są przez kanał, który dla zadanego prawdopodobieństwa przekłamuje bity w ciągu danych. Po tej operacji wynik jest descramblowany i dla prawdopodobieństwa z przedziału [0, 0.1] liczony jest stopa błędów BER, czyli stosunek ilości przekłamanych do wszystkich bitów.
     \subsection{Opis programów}
-
+    	\subparagraph{Generacja losowego ciągu bitów \\}
+    	 Generuje ona najpierw ciąg losowych liczb rzeczywistych z przedziału [0,1]. Liczby były losowane rozkładem równomiernym.
+        Następnie liczby powyżej zadanego progu (w czasie eksperymentów próg = 0.5) zamieniane są na bity 1,
+        a liczby poniżej progu zamieniane są na 0.
+    	\subparagraph{Scrambler DVB\\}
+    	Bufor scramblera ma rozmiar 15 bitów. Do funkcji przekazywana jest tablica zawierająca bity  oraz zadane jest słowo synchronizujące \texttt{[ 1 0 0 1 0 1 0 1 0 0 0 0 0 0 0 ]}. Pętla w funkcji wykonuje się tyle razy ile mamy bitów w danych wejściowych. Za każdym razem jest wykonywana operacja xor bitów nr 14 i 15, a następnie na wyniku tego działania jest wykonywana operacja xor z aktualnym bitem danych, wynikiem jest bit wyjściowy. Dodatkowo słowo synchronizujące jest przesuwane o jeden bit w prawo, a jego  bitowi nr 1 przypisywana jest wcześniej obliczony xor bitów nr 14 i 15.
+    	\subparagraph{Descrambler DVB\\}
+    	Descrambler DVB działa tak samo jak scrambler. Wynika to z tego, że jest addytywny. Aby zdeszyfrować poprawnie dane należy użyć tego samego słowa synchronizującego co w scramblerze.  
+    	\subparagraph{Scrambler V34\\}
+    
+    	Bufor scramblera ma rozmiar 23 bitów. Do funkcji przekazywana jest tablica zawierająca bity. W przeciwieństwie do scramblera DVB nie używa zadanego słowa synchronizującego. Na początku bufor wypełniony jest zerami. Pętla w funkcji wykonuje się tyle razy ile mamy bitów w danych wejściowych.  Za każdą iteracją pętli obliczany jest xor bitów nr 18 i 23. Następnie bufor przesuwany jest w prawo o jeden bit. Bit nr 1 będzie miał wartość działania xor aktualnych danych wejściowych oraz wcześniej obliczonego xor bitów nr 18 i 23. Taką samą wartość będzie miał bit wyjściowy.
+    	\subparagraph{Descrambler V34\\}
+    	Bufor descramblera ma rozmiar 23 bitów. Do funkcji przekazywana jest tablica zawierająca bity. Bufor na początku wypełniony jest zerami. Pętla w funkcji wykonuje się tyle razy ile mamy bitów w danych wejściowych. W pętli obliczany jest xor 18 i 23 bitu. Następnie bufor przesuwany jest o jeden bit w prawo. Jego bitem nr 1 będzie aktualny bit danych wejściowych. Bitem wynikowym jest xor aktualnego bitu danych wejściowych oraz wcześniej obliczonego xor bitów 18 i 23.
+    	\subparagraph{Kanał transmisyjny\\}
+    	Do funkcji przekazywana jest tablica bitów oraz prawdopodobieństwo z jakim pojedynczy bit może zostać przekłamany. Dla każdego bitu z danych wejściowych losowana jest liczba rzeczywista z przedziału [0,1], jeśli będzie ona mniejsza od zadanego prawdopodobieństwa to na bicie z danych wejściowych zostanie przeprowadzona negacja, jeśli będzie większa to bit zostanie zostawiony bez zmian.
 \section{Eksperymenty symulacyjne}
     \subsection{Plan eksperymentów}
 
